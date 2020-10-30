@@ -1,0 +1,42 @@
+package com.laptrinhjavaweb.controller.web;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.laptrinhjavaweb.dto.NewDTO;
+import com.laptrinhjavaweb.service.ICategoryService;
+import com.laptrinhjavaweb.service.INewService;
+
+
+@Controller(value = "newControllerOfWeb")
+public class NewController {
+
+	@Autowired
+	INewService newService;
+	
+	@Autowired
+	ICategoryService categoryService;
+	
+	
+	@RequestMapping(value = "/ctbv", method = RequestMethod.GET)
+	public ModelAndView homePage(@RequestParam(value = "id")Long id) {
+		ModelAndView mav = new ModelAndView("web/page");
+		NewDTO model = new NewDTO();
+		model = newService.findById(id);
+		mav.addObject("model",model);
+		return mav;
+	}
+	
+	@RequestMapping(value = "/categorypage", method = RequestMethod.GET)
+	public ModelAndView CategoryPage(@RequestParam(value = "categoryid") Long categoryid) {
+		NewDTO model = new NewDTO();
+		ModelAndView mav = new ModelAndView("web/categorypage");
+		model.setListResult(newService.findAllByCategoryId(categoryid));
+		mav.addObject("model", model);
+		return mav;
+		}	
+}
